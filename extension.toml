@@ -1,0 +1,15 @@
+name = "Spade"
+version = "0.0.1"
+authors = ["Daria Mukhina <me@dasha.fyi>"]
+description = "Spade support."
+repository = "https://github.com/syrkatheprincess/zed-spade"
+id = "spade"
+schema_version = 1
+
+[grammars.spade]
+repository = "https://gitlab.com/spade-lang/tree-sitter-spade/"
+commit = "39dba69d26782bf3439c62298cd1cf6b06901e31"
+
+[language_servers.spade-language-server]
+name = "spade-language-server"
+languages = ["Spade"]
