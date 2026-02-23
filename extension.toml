@@ -8,7 +8,7 @@ schema_version = 1
 
 [grammars.spade]
 repository = "https://gitlab.com/spade-lang/tree-sitter-spade/"
-commit = "39dba69d26782bf3439c62298cd1cf6b06901e31"
+commit = "f4f62fcb2340d744f6df48de22b5f239beecdab5"
 
 [language_servers.spade-language-server]
 name = "spade-language-server"

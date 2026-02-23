@@ -35,21 +35,19 @@
 
 ((pipeline_reg_marker) @keyword)
 
-(scoped_identifier
-  path: (identifier) @module)
-(scoped_identifier
- (scoped_identifier
-  name: (identifier) @module))
+((identifier) @type
+ (#match? @type "^[A-Z].*"))
+
 ((scoped_identifier
-    name: (identifier) @type)
- (#lua-match? @type "^[A-Z]"))
+   _ @type
+   (identifier) @type)
+ (#match? @type "^[A-Z].*"))
 
 ((builtin_type) @type.builtin)
 
 ((identifier) @type.builtin
  (#any-of?
     @type.builtin
-    "uint"
     "Option"
     "Memory"))
 
@@ -57,27 +55,34 @@
  (#any-of? @constant.builtin "Some" "None"))
 
 ((pipeline_stage_name) @label)
+((pipeline_stage_name (identifier) @label))
 
 ((stage_reference
     stage: (identifier) @label))
 
 [
+    "pub"
+    "unsafe"
     "pipeline"
     "let"
     "set"
     "entity"
     "fn"
     "reg"
+    "initial"
     "reset"
     "inst"
     "assert"
     "struct"
     "enum"
+    "trait"
+    "type"
     "stage"
     "impl"
     "port"
     "decl"
     "mod"
+    "as"
 ] @keyword
 
 [
@@ -91,6 +96,26 @@
 ((gen_if_expression ["if" "else"] @preproc))
 ((naked_gen_if_expression ["if" "else"] @preproc))
 
+[
+    "("
+    ")"
+    "["
+    "]"
+    "{"
+    "}"
+    "$("
+    "::<"
+    "::$<"
+] @punctuation.bracket
+
+[
+    "::"
+    ":"
+    "."
+    ","
+    ";"
+] @punctuation.delimiter
+
 ;((attribute
 ;  "#" @punctuation.special
 ;  "[" @punctuation.bracket
@@ -103,30 +128,32 @@
 ;  "]" @punctuation.bracket
 ;))
 
-((attribute
-   "#" @punctuation.special
-   "[" @punctuation.bracket
-    ( identifier ) @variable @function.macro
-    "(" @punctuation.bracket
-    ((attribute_argument
-        (identifier) @variable
-    ))
-    ;"," @punctuation.delimiter
-   ")" @punctuation.bracket
-   "]" @punctuation.bracket
-))
+;((attribute
+;   "#" @punctuation.special
+;   "[" @punctuation.bracket
+;      ( identifier ) @variable @function.macro
+;      "(" @punctuation.bracket
+;   ")" @punctuation.bracket
+;   "]" @punctuation.bracket
+;))
+
+((attribute) @attribute)
+(field_access _ (identifier) @property)
+(method_call name: (identifier) @function.method)
+(generic_param meta: _ @type.builtin)
 
 [
   "else"
   "if"
   "match"
-] @conditional
+] @keyword.conditional
 
 (bool_literal) @boolean
 (int_literal) @number
 
 [
   "&"
+  "*"
   "inv"
   "-"
   "=>"
@@ -149,15 +176,35 @@
 ((op_ge) @operator)
 ((op_lshift) @operator)
 ((op_rshift) @operator)
+((op_wadd) @operator)
+((op_wsub) @operator)
+((op_wmul) @operator)
+((op_wlshift) @operator)
+((op_wrshift) @operator)
 ((op_bitwise_and) @operator)
 ((op_bitwise_xor) @operator)
 ((op_bitwise_or) @operator)
 ((op_logical_and) @operator)
 ((op_logical_or) @operator)
+((op_custom_infix) @operator)
+((op_custom_infix (identifier) @operator))
 
+(turbofish _ ">"
+  @punctuation.bracket)
+
+(generic_list
+    "<" @punctuation.bracket
+    _
+    ">" @punctuation.bracket)
+
+(generic_parameters
+    "<" @punctuation.bracket
+    _
+    ">" @punctuation.bracket)
 
 [
   (line_comment)
-  (doc_comment)
   (block_comment)
-] @comment @spell
+] @comment
+
+((doc_comment) @comment.documentation)
